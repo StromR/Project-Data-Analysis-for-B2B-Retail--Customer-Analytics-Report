@@ -11,4 +11,4 @@ The table that will be used in this project are as follows.
     <li>Customer table: Contains data on customer profiles who register as xyz.com customers</li>
 </ol>
 
-![image info](./table_attributes.png)
+![image info](./pictures/table_attributes.png)
