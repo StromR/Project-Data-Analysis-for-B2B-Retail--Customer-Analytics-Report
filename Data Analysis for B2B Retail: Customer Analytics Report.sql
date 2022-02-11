@@ -43,3 +43,29 @@ SELECT * FROM customer LIMIT 5;
 
 -- Total Penjualan (sales) and Revenue From Q1 and Q2
 
+SELECT 
+	SUM(quantity) AS total_penjualan,
+	SUM(quantity * priceEach) AS revenue
+FROM orders_1
+WHERE status = 'Shipped';
+/* Output
++-----------------+-----------+
+| total_penjualan | revenue   |
++-----------------+-----------+
+|            8694 | 799579310 |
++-----------------+-----------+
+*/
+
+SELECT
+	SUM(quantity) AS total_penjualan,
+	SUM(quantity * priceEach) AS revenue
+FROM orders_2
+WHERE status = 'Shipped';
+/* Output
++-----------------+-----------+
+| total_penjualan | revenue   |
++-----------------+-----------+
+|            6717 | 607548320 |
++-----------------+-----------+
+*/
+
