@@ -69,3 +69,24 @@ WHERE status = 'Shipped';
 +-----------------+-----------+
 */
 
+
+-- Calculate the percentage of all sales from Q1 and Q2
+SELECT
+	quarter,
+	SUM(quantity) AS total_penjualan,
+	SUM(quantity * priceEach) AS revenue
+FROM 
+(SELECT 1 AS quarter, orderNumber, status, quantity, priceEach FROM orders_1 
+ UNION
+SELECT 2 AS quarter, orderNumber, status, quantity, priceEach FROM orders_2)
+AS table_1 WHERE status = 'Shipped'
+GROUP BY quarter;
+
+/* Output
++---------+-----------------+-----------+
+| quarter | total_penjualan | revenue   |
++---------+-----------------+-----------+
+|       1 |            8694 | 799579310 |
+|       2 |            6717 | 607548320 |
++---------+-----------------+-----------+
+*/
