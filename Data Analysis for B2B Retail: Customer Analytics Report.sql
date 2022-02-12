@@ -114,3 +114,92 @@ GROUP BY QUARTER(createDate);
 |       2 |              35 |
 +---------+-----------------+
 */
+
+
+
+-- How many customers made transaction?
+SELECT
+	quarter,
+	COUNT(DISTINCT(customerID)) AS total_customers
+FROM
+(SELECT
+	customerID,
+	createDate,
+	QUARTER(createDate) AS quarter
+FROM customer
+WHERE createDate BETWEEN '2004-01-01' AND '2004-06-30') AS tabel_b
+WHERE customerID IN(
+SELECT
+	DISTINCT(customerID)
+FROM orders_1 
+UNION
+SELECT 
+	DISTINCT(customerID)
+FROM orders_2) 
+GROUP BY quarter;
+ 
+/* Output
++---------+-----------------+
+| quarter | total_customers |
++---------+-----------------+
+|       1 |              25 |
+|       2 |              19 |
++---------+-----------------+
+*/
+
+
+
+-- The most popular product category in Q2
+SELECT 
+	*
+FROM
+	(SELECT
+		categoryID,
+		COUNT(DISTINCT(orderNumber)) AS total_order,
+		SUM(quantity) AS total_penjualan
+	FROM
+		(SELECT
+			productCode, 
+			orderNumber,
+			quantity,
+			status,
+			LEFT(productCode,3) AS categoryID
+		FROM orders_2
+		WHERE status = 'Shipped') AS tabel_c
+	GROUP BY categoryID) AS A
+ORDER BY total_order DESC;
+
+/* Output
++------------+-------------+-----------------+
+| categoryID | total_order | total_penjualan |
++------------+-------------+-----------------+
+| S18        |          25 |            2264 |
+| S24        |          21 |            1826 |
+| S32        |          11 |             616 |
+| S12        |          10 |             491 |
+| S50        |           8 |             292 |
+| S10        |           8 |             492 |
+| S70        |           7 |             675 |
+| S72        |           2 |              61 |
++------------+-------------+-----------------+
+*/
+
+
+
+-- How many customers remain active after the first transaction? (in percentage)
+SELECT
+	'1' AS quarter,
+	COUNT(DISTINCT(customerID)) * 100/25 AS Q2
+FROM orders_1
+WHERE customerID IN(
+		SELECT
+			DISTINCT(customerID)
+		FROM orders_2);
+
+/* Output
++---------+---------+
+| quarter | Q2      |
++---------+---------+
+| 1       | 24.0000 |
++---------+---------+
+*/
