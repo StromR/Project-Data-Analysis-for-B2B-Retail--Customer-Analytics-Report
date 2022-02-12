@@ -90,3 +90,27 @@ GROUP BY quarter;
 |       2 |            6717 | 607548320 |
 +---------+-----------------+-----------+
 */
+
+
+
+-- Does the total customer of xyz.com growing?
+SELECT
+	QUARTER(createDate) AS quarter,
+	COUNT(DISTINCT(customerID)) AS total_customers
+FROM
+(SELECT
+	customerID,
+	createDate,
+	QUARTER(createDate) AS quarter
+FROM customer 
+WHERE createDate BETWEEN '2004-01-01' AND '2004-06-30') AS table_b
+GROUP BY QUARTER(createDate);
+
+/*
++---------+-----------------+
+| quarter | total_customers |
++---------+-----------------+
+|       1 |              43 |
+|       2 |              35 |
++---------+-----------------+
+*/
